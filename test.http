@@ -1,0 +1,18 @@
+### Test Firebase Token Verification - Success Case
+POST http://localhost:8000/verify-token
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjU5MWYxNWRlZTg0OTUzNjZjOTgyZTA1MTMzYmNhOGYyNDg5ZWFjNzIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZmxvd25vdy12b2ljZSIsImF1ZCI6ImZsb3dub3ctdm9pY2UiLCJhdXRoX3RpbWUiOjE3NDY2MTU1OTgsInVzZXJfaWQiOiJqNUkyZDB3RU9tWXpxZnZVSmJlelM3SVNCUlgyIiwic3ViIjoiajVJMmQwd0VPbVl6cWZ2VUpiZXpTN0lTQlJYMiIsImlhdCI6MTc0NjYxNTg3MiwiZXhwIjoxNzQ2NjE5NDcyLCJlbWFpbCI6ImRldkBhZ25pZXZlLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJkZXZAYWduaWV2ZS5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.f0VkYX3gsHFTWuTWcYxJkuox-6h-rvbFkI4P7s-x9GS08s_Qfnq_Yhrz_CqRx2EG4465Y3TdPuLCnA7yJvGyyw7AMWy0cEojbSx9Fo3TzzqnJ5iVuBD2OJ7f3CN34L2GAVDxzv4IDsZeM2o2onF48VlP2cocZrPmaErcizWtfvOxSL_ak6JJECQ3htb5pzfpNiKZEWhiASrCx6fWjLKjO3ReeF3kahTrFVECHSIffIdVPDk582fXxsl6rhyY_1hI5x296ETpY9bqRlJ02PbPBe4HxrnlzyEZm6iq2aPiT96TZqa0bFD-IfbrRs9AouGTP1qB1cU_M_TpH0Zt2QAFeA
+
+### Test Firebase Token Verification - Invalid Token Case
+POST http://localhost:8000/verify-token
+Content-Type: application/json
+Authorization: Bearer invalid_token
+
+### Variables
+@firebase_token = your_firebase_token_here
+
+# Note: Replace 'your_firebase_token_here' with a valid Firebase ID token
+# To get a valid token:
+# 1. Sign in to your Firebase application
+# 2. Get the ID token from the authenticated user
+# 3. Copy and paste it as the value for @firebase_token
