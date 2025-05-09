@@ -1,7 +1,8 @@
 from fastapi import FastAPI, WebSocket, Depends, HTTPException, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-
+import base64
+import json
 import asyncio
 from pathlib import Path
 from google import genai
@@ -15,8 +16,17 @@ from firebase_admin import auth, credentials
 # Load environment variables from .env file
 load_dotenv()
 
-# Initialize Firebase Admin SDK
-cred = credentials.Certificate(os.getenv('FIREBASE_SERVICE_ACCOUNT_PATH'))
+# Get the base64-encoded Firebase Admin key from environment
+firebase_base64 = os.getenv('FIREBASE_ADMIN_KEY_B64')
+
+# Decode the base64 string to JSON string
+decoded_json = base64.b64decode(firebase_base64).decode('utf-8')
+
+# Parse the JSON string
+service_account_info = json.loads(decoded_json)
+
+# Initialize Firebase Admin with the credentials
+cred = credentials.Certificate(service_account_info)
 firebase_admin.initialize_app(cred)
 
 # Security bearer token

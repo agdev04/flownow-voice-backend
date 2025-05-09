@@ -45,3 +45,5 @@ yarn-error.log*
 # Local development
 .DS_Store
 Thumbs.db
+
+firebase.json.b64
