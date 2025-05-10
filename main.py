@@ -1,4 +1,5 @@
 from fastapi import FastAPI, WebSocket, Depends, HTTPException, status
+from starlette.websockets import WebSocketState
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import base64
@@ -310,12 +311,18 @@ async def websocket_endpoint(websocket: WebSocket):
                                     
                         except Exception as e:
                             print(f"Error in conversation: {e}")
-                            await websocket.send_text(f"Error: {str(e)}")
+                            if websocket.client_state == WebSocketState.CONNECTED:
+                                await websocket.send_text(f"Error: {str(e)}")
                             break
                             
             except Exception as e:
                 print(f"Session error: {e}")
-                await websocket.send_text(f"Session error: {str(e)}")
+                if "User location is not supported for the API use" in str(e):
+                    if websocket.client_state == WebSocketState.CONNECTED:
+                        await websocket.send_text("Service not available in your region due to API limitations.")
+                        await websocket.close(code=status.WS_1008_POLICY_VIOLATION, reason="Location not supported")
+                elif websocket.client_state == WebSocketState.CONNECTED:
+                    await websocket.send_text(f"Session error: {str(e)}")
                 await asyncio.sleep(1)  # Wait before reconnecting
     finally:
         # Release the semaphore when the connection is closed
