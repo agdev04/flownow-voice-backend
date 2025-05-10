@@ -270,6 +270,9 @@ async def websocket_endpoint(websocket: WebSocket):
                         await session.send_client_content(turns=conversation_history, turn_complete=False)
 
                     while True:
+                        if websocket.client_state != WebSocketState.CONNECTED:
+                            print(f"WebSocket disconnected for user {uid} before receive, breaking inner loop.")
+                            break
                         message = await websocket.receive()
                         data = message["text"]
 
@@ -329,3 +332,11 @@ async def websocket_endpoint(websocket: WebSocket):
     finally:
         # Release the semaphore when the connection is closed
         session_semaphore.release()
+        if websocket.client_state != WebSocketState.CLOSED:
+            try:
+                await websocket.close(code=status.WS_1000_NORMAL_CLOSURE)
+                print(f"WebSocket connection explicitly closed in finally block for user: {uid if 'uid' in locals() else 'unknown'}")
+            except Exception as e:
+                print(f"Error closing WebSocket in finally block for user {uid if 'uid' in locals() else 'unknown'}: {e}")
+        else:
+            print(f"WebSocket already closed for user: {uid if 'uid' in locals() else 'unknown'}")
