@@ -318,6 +318,8 @@ async def websocket_endpoint(websocket: WebSocket):
             except Exception as e:
                 print(f"Session error: {e}")
                 if "User location is not supported for the API use" in str(e):
+                    client_ip = websocket.client.host
+                    print(f"Service not available for IP: {client_ip} due to API limitations.")
                     if websocket.client_state == WebSocketState.CONNECTED:
                         await websocket.send_text("Service not available in your region due to API limitations.")
                         await websocket.close(code=status.WS_1008_POLICY_VIOLATION, reason="Location not supported")
