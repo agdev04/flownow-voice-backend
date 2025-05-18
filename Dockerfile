@@ -6,7 +6,6 @@ RUN mkdir /app/utils
 COPY *.py /app/
 COPY requirements.txt /app/
 COPY assets/* /app/assets/
-COPY utils/* /app/utils/
 
 WORKDIR /app
 RUN pip3 install -r requirements.txt
